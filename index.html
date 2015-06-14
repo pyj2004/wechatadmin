@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>管理后台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script language="javascript" src="vendors/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="js/jquery.func.js"></script>
+<link rel="stylesheet" media="screen" href="css/bootstrap.min.css">
+<link rel="stylesheet" media="screen" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" media="screen" href="css/bootstrap-admin-theme.css">
+<link rel="stylesheet" media="screen" href="css/style.css">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top bootstrap-admin-navbar" role="navigation">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".main-navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+          <a class="navbar-brand" href="index.html">微信平台</a> </div>
+        <div class="collapse navbar-collapse main-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="index.html"><i class="glyphicon glyphicon-wrench"></i> 账户设置</a></li>
+            <li><a href="app.html"><i class="glyphicon glyphicon-th-large"></i> 应用管理</a></li>
+          </ul>
+          <ul class="nav navbar-nav pull-right">
+            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-hover="dropdown"><i class="glyphicon glyphicon-user"></i> 我的 <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="pwd.html">修改密码</a></li>
+                <li><a href="help.html">系统帮助</a></li>
+                <li role="presentation" class="divider"></li>
+                <li><a href="javascript:void(0);">退出登录</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row">
+    <div class="col-md-2 bootstrap-admin-col-left" id="menu-left">
+      <ul class="nav navbar-collapse collapse bootstrap-admin-navbar-side">
+        <li class="active"> <a href="index.html"><i class="glyphicon glyphicon-home"></i> 平台首页</a> </li>
+        <li> <a href="bind.html"><i class="glyphicon glyphicon-chevron-right"></i> 账号绑定</a> </li>
+        <li> <a href="javascript:void(0);"><i class="glyphicon glyphicon-chevron-right"></i> 公众平台</a>
+          <ul class="nav  bootstrap-admin-navbar-side collapse">
+            <li><a href="news.html"><i class="glyphicon glyphicon-chevron-right"></i> 素材管理</a></li>
+            <li><a href="keyword.html"><i class="glyphicon glyphicon-chevron-right"></i> 关键词回复</a></li>
+            <li><a href="menu.html"><i class="glyphicon glyphicon-chevron-right"></i> 自定义菜单</a></li>
+            <li><a href="msg.html"><i class="glyphicon glyphicon-chevron-right"></i> 信息群发</a></li>
+          </ul>
+        </li>
+        <li > <a href="user.html"><i class="glyphicon glyphicon-chevron-right"></i> 用户管理 <span class="badge">100</span></a></li>
+      </ul>
+      <div class="col-sm-12 no-padding">
+        <div class="panel-body text-center">中联无限 &copy; 2015</div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="navbar navbar-default bootstrap-admin-navbar-thin">
+            <ol class="breadcrumb bootstrap-admin-breadcrumb">
+              <li> <a href="index.html">微信平台</a> </li>
+              <li class="active">平台首页</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="alert alert-warning bootstrap-admin-alert">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <i class="glyphicon glyphicon-refresh"></i> 尊敬的客户，系统检测到有新的版本，请及时更新！ </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-default bootstrap-admin-no-table-panel">
+            <div class="panel-heading">
+              <div class="text-muted bootstrap-admin-box-title">系统统计</div>
+            </div>
+            <div class="panel-body">
+              <div>
+                <table class="table bootstrap-admin-table-with-actions">
+                  <thead>
+                    <tr>
+                      <th>项目</th>
+                      <th>总数</th>
+                      <th>今日新增</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>粉丝数量</td>
+                      <td>100</td>
+                      <td>5</td>
+                    </tr>
+                    <tr>
+                      <td>应用消息</td>
+                      <td>25</td>
+                      <td>3</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="panel panel-default bootstrap-admin-no-table-panel">
+            <div class="panel-heading">
+              <div class="text-muted bootstrap-admin-box-title">系统信息</div>
+            </div>
+            <div class="panel-body no-padding">
+              <table class="table no-margin">
+                <tbody>
+                  <tr>
+                    <td class="text-right" width="100">服务器IP：</td>
+                    <td>127.0.0.1</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">服务器时间：</td>
+                    <td>25</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">服务器环境：</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">PHP版本：</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">物理路径：</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">上传大小：</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="panel panel-default bootstrap-admin-no-table-panel">
+            <div class="panel-heading">
+              <div class="text-muted bootstrap-admin-box-title">程序信息</div>
+            </div>
+            <div class="panel-body no-padding">
+              <table class="table  no-margin">
+                <tbody>
+                  <tr>
+                    <td class="text-right" width="100">程序版本：</td>
+                    <td>127.0.0.1</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">技术支持：</td>
+                    <td>25</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">联系方式：</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">帮助中心：</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">物理路径：</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right">上传大小：</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

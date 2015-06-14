@@ -1,0 +1,5 @@
+body{font-family:Microsoft YaHei;}
+.bootstrap-admin-col-left > .bootstrap-admin-navbar-side > li .bootstrap-admin-navbar-side li a{ padding-left:30px; }
+.no-padding{padding:0px;}
+.no-margin{margin:0px;}
+.datepicker{z-index:1100;}

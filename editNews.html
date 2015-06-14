@@ -1,0 +1,456 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>管理后台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script language="javascript" src="vendors/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="js/jquery.func.js"></script>
+<link rel="stylesheet" media="screen" href="css/bootstrap.min.css">
+<link rel="stylesheet" media="screen" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" media="screen" href="css/bootstrap-admin-theme.css">
+<link rel="stylesheet" media="screen" href="css/style.css">
+<script type="text/javascript" src="vendors/bootbox.min.js"></script>
+<script type="text/javascript" src="js/template3.js"></script>
+<script type="text/javascript" src="js/store.js"></script>
+<link rel="stylesheet" media="screen" href="images/wechat.css">
+<script>
+function logit(n){
+	 //$("#ddd").val($("#ddd").val()+n+":"+JSON.stringify($data)+"<br />");	
+} 
+function getdatetime(){
+	var d = new Date();
+	var vYear = d.getFullYear();
+	var vMon = d.getMonth() + 1;
+	var vDay = d.getDate();
+	var h = d.getHours(); 
+	var m = d.getMinutes(); 
+	var se = d.getSeconds(); 
+	var s=vYear+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+(vDay<10 ? "0"+ vDay : vDay)+" "+(h<10 ? "0"+ h : h)+":"+(m<10 ? "0" + m : m)+":"+(se<10 ? "0" +se : se);
+	return s;	
+}
+var isSave=false;
+var init = []; 
+var $data=[{"id":"42","material_id":"16","title":"1111","remark":"3","info":"4","indexpic":"\/Public\/uploadfile\/file\/2015-05-01\/55438e70d993b.jpg","panel_name":"","author":"2","isshowpic":"1","iscomment":"0","islink":"1","url":"5","ourl":"6","sort":"0","hits":"0","praise":"0"},{"id":"43","material_id":"16","title":"2","remark":"4","info":"5","indexpic":"\/Public\/uploadfile\/file\/2015-05-01\/554391917108a.jpg","panel_name":"","author":"3","isshowpic":"0","iscomment":"0","islink":"1","url":"6","ourl":"7","sort":"0","hits":"0","praise":"0"},{"id":"44","material_id":"16","title":"23232323","remark":"","info":"","indexpic":"\/Public\/uploadfile\/file\/2015-05-01\/55438e70d993b.jpg","panel_name":"","author":"333","isshowpic":"1","iscomment":"0","islink":"0","url":"","ourl":"","sort":"0","hits":"0","praise":"0"}]; 
+var $storename="storedata_16";
+	 if (!store.enabled) {
+		alerterr('对不起，您的浏览器不支持本地存储，将无法使用自动保存功能！建议升级浏览器，如chrome。'); 
+	}
+	
+
+	//自动保存到storeage
+	$store=store.get($storename);
+	if($store){
+		$data=$store;
+	};
+	
+var nextid;
+var currid=0;
+var indexpic="";
+$(function(){
+	if($data==null){
+		nextid=1;
+		$data=[];
+		addit(); 
+	}else{
+		nextid=parseInt($data[$data.length-1].id)+1;
+		
+		var firstid=parseInt($data[0].id);
+		editArray(firstid);
+		
+		//更新第一个
+		 
+		$("#single-title_"+firstid).text($data[0].title);
+		$("#single-image_"+firstid).attr("src",$data[0].indexpic);
+	}
+	
+	window.onbeforeunload   =   function(){
+		if(isSave){
+		}else{
+			editArray(currid); 
+			return  ("已自动保存"+getdatetime()+"时的内容！");
+		}
+	}
+
+	//$.rendUploaderMaterial("#btnUploadMaterial");  
+	
+	$("#single-link a").click(function(){
+		$("#single-link a").removeClass('active');
+		
+		var v=$(this).data('value');
+		$(this).addClass('active');
+		
+		$("#islink").val(v);
+		$("#single-link"+v).show();
+		$("#single-link"+(v==1?0:1)).hide();
+		
+		$("#single-olink"+v).show();
+		$("#single-olink"+(v==1?0:1)).hide();
+	});
+	
+	/*var linkid="";
+	$("#single-link a").eq(linkid).click();*/
+	
+	/*$("#formx_multi").ajaxForm(
+		{
+			beforeSubmit:function(){
+				$("#btn-saveme").attr("disabled",true);
+			},
+			data:{data:$data},
+			success:function(data){
+				if(data.status==1){
+					//清空自动保存
+					isSave=true;
+					store.remove($storename);
+					alertok(data.info);  
+					setTimeout(function(){
+						location="/admin/wechat/news.html";
+						},1000);
+				}else{
+					alerterr(data.info);
+                    $("#btn-saveme").attr("disabled",false);
+				}
+			}
+		}
+	); */
+	
+	
+	
+});
+
+function addit(){ 
+	if($data.length>9){
+		alerterr("对不起，您最多只能添加10条消息！");	
+		return false;
+	}
+	var data = {
+		list:[{id:0,title:'标题',indexpic:indexpic},{id:nextid,title:'标题',indexpic:indexpic}]
+	};
+	var html = template('tplnews', data); 
+	$("#newslist").append(html);
+	addArray(nextid);
+	nextid++;
+}
+function delit(id){
+	$("#newsleft_"+id).remove();
+	$("#newsright").hide();
+	deleteArray(id);
+}
+
+//添加消息
+function addArray($nextid){
+	$data.push(newsblank($nextid));
+	editArray($nextid);
+}
+
+//编辑消息
+function editArray($newsid){
+	//保存前一条的消息 
+	savecurr();  
+	var idx=getIdxById($newsid);
+	$news=$data[idx]; 
+	//alert(JSON.stringify($news));
+	$("#title").val($news['title']);
+	$("#material_id").val($news['material_id']);
+	$("#remark").val($news['remark']);
+	$("#info").val($news['info']);
+	$("#indexpic").val($news['indexpic']);
+	$("#author").val($news['author']);
+	$("#isshowpic").val($news['isshowpic']);
+	$("#iscomment").val($news['iscomment']);
+	$("#islink").val($news['islink']);
+	$("#url").val($news['url']);  
+	$("#ourl").val($news['ourl']);  
+	$("#newsid").val($newsid); 
+	if($news['indexpic']==""){ 
+		$news['indexpic'] = indexpic;
+	}   
+	$("#indexpic").attr("data-image","#single-image_"+$newsid);
+	 
+	 //内容还是链接
+	var n=($("#islink").val());
+	$("#single-link a").eq(n).click(); 
+	//封面是否显示在正文
+	if($news['isshowpic']==1){
+		$("#isshowpic").attr("checked",true);	
+	}else{
+		$("#isshowpic").attr("checked",false);
+	} 
+	
+	//封面是否显示在正文
+	if($news['iscomment']==1){
+		$("#iscomment").attr("checked",true);	
+	}else{
+		$("#iscomment").attr("checked",false);
+	}
+	//default_editor.setSource($news['info']);
+	
+	//右框位置
+	var top=0; 
+	if(idx!=0){
+		top = 230+100*(idx-1);
+	}
+	$("#newsright").css('margin-top',top).show();
+	currid=$newsid; 
+	
+}
+//删除消息
+function deleteArray($newsid){
+	var idx=getIdxById($newsid);
+	$data.splice(idx,1);
+	logit(2);
+	currid=0;
+	store.set($storename,$data);
+	//alert(idx+"|"+JSON.stringify($data));
+	
+}
+
+//根据ID取得数组索引值
+function getIdxById($newsid){
+	//alert($newsid+"|"+JSON.stringify($data));
+	logit(1);
+	var idx=0;
+	for(var i=0;i<$data.length;i++){
+		if($data[i].id==$newsid){
+			idx=i;	
+			break;
+		}
+	}
+	return idx;
+}
+
+//新建空白消息
+function newsblank($newsid){ 
+	var news={
+		id:$newsid,
+		material_id:"",
+		title:"",
+		remark:"",
+		info:"",
+		indexpic:"",
+		author:"",
+		isshowpic:"",
+		iscomment:"1",
+		islink:"",
+		url:"",
+		ourl:""
+	};
+	return news;
+}
+
+//保存当前编辑
+function savecurr(){
+	if(currid==0){
+		return false;	
+	}
+	var news={
+		id:currid,
+		material_id:"16",
+		title:$.trim($("#title").val()),
+		remark:$.trim($("#remark").val()),
+		//info:$.trim($("#info").val()),
+		info:$.trim(default_editor.getSource()),
+		indexpic:$.trim($("#indexpic").val()),
+		author:$.trim($("#author").val()),
+		isshowpic:$.trim($("#isshowpic").attr("checked")?1:0),
+		iscomment:$.trim($("#iscomment").attr("checked")?1:0),
+		islink:$.trim($("#islink").val()),
+		url:$.trim($("#url").val()),
+		ourl:$.trim($("#ourl").val())
+	};
+	var idx=getIdxById(currid);
+	$data[idx]=news;
+	store.set($storename,$data);
+}
+		
+</script>
+<script> 
+$(function(){
+	var data = { 
+		list:$data
+	};
+	if(data.list!=null){
+	var html = template('tplnews', data); 
+	 $("#newslist").html(html);
+	} 
+	$("#title").keyup(function(){$("#single-title_"+currid).text($.trim($(this).val()))});
+	
+	 
+})
+</script>
+<style>
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top bootstrap-admin-navbar" role="navigation">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".main-navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+          <a class="navbar-brand" href="index.html">微信平台</a> </div>
+        <div class="collapse navbar-collapse main-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="index.html"><i class="glyphicon glyphicon-wrench"></i> 账户设置</a></li>
+            <li><a href="app.html"><i class="glyphicon glyphicon-th-large"></i> 应用管理</a></li>
+          </ul>
+          <ul class="nav navbar-nav pull-right">
+            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-hover="dropdown"><i class="glyphicon glyphicon-user"></i> 我的 <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="pwd.html">修改密码</a></li>
+                <li><a href="help.html">系统帮助</a></li>
+                <li role="presentation" class="divider"></li>
+                <li><a href="javascript:void(0);">退出登录</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row">
+    <div class="col-md-2 bootstrap-admin-col-left" id="menu-left">
+      <ul class="nav navbar-collapse collapse bootstrap-admin-navbar-side">
+        <li> <a href="index.html"><i class="glyphicon glyphicon-home"></i> 平台首页</a> </li>
+        <li> <a href="bind.html"><i class="glyphicon glyphicon-chevron-right"></i> 账号绑定</a> </li>
+        <li> <a href="javascript:void(0);"><i class="glyphicon glyphicon-chevron-right"></i> 公众平台</a>
+          <ul class="nav  bootstrap-admin-navbar-side collapse">
+            <li class="active"><a href="news.html"><i class="glyphicon glyphicon-chevron-right"></i> 素材管理</a></li>
+            <li><a href="keyword.html"><i class="glyphicon glyphicon-chevron-right"></i> 关键词回复</a></li>
+            <li><a href="menu.html"><i class="glyphicon glyphicon-chevron-right"></i> 自定义菜单</a></li>
+            <li><a href="msg.html"><i class="glyphicon glyphicon-chevron-right"></i> 信息群发</a></li>
+          </ul>
+        </li>
+        <li > <a href="user.html"><i class="glyphicon glyphicon-chevron-right"></i> 用户管理 <span class="badge">100</span></a></li>
+      </ul>
+      <div class="col-sm-12 no-padding">
+        <div class="panel-body text-center">中联无限 &copy; 2015</div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="navbar navbar-default bootstrap-admin-navbar-thin">
+            <ol class="breadcrumb bootstrap-admin-breadcrumb">
+              <li> <a href="index.html">微信平台</a> </li>
+              <li class="active">账号绑定</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-default bootstrap-admin-no-table-panel">
+            <div class="panel-heading">
+              <div class="text-muted bootstrap-admin-box-title">素材管理</div>
+            </div>
+            <div class="panel-body">
+              <ul id="myTab" class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="news.html" >图文素材</a></li>
+                <li ><a href="image.html"  >图片素材</a></li>
+              </ul>
+              <table class="table table-bordered tblNews" style="border-top:0px;">
+                <tr>
+                  <td style="border-top:0px;"><table >
+                      <tr>
+                        <td valign="top" ><div class="newsleft" id="newsleft_1">
+                            <div class="newsleft_title"  id="single-title_42"> 1111 </div>
+                            <div class="newsleft_cover" >
+                              <div class="overlay"> <a href="javascript:void(0);" class="news_edit"  onClick="editArray(42)" >修改</a> </div>
+                              <div class="cover">封面图片</div>
+                              <img src="/Public/uploadfile/file/2015-05-01/55438e70d993b.jpg"  id="single-image_42" alt=""> </div>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div id="leftbox">
+                            <div id="newslist"> </div>
+                            <a href="javascript:void(0);" onClick="addit();" class="news_add"></a> </div>
+                          <div class="clearfix"></div></td>
+                        <td valign="top"><div id="newsright">
+                            <div class="arrow_news"></div>
+                            <div class="newsright">
+                              <table width="100%" border="0" cellpadding="0">
+                                <tr>
+                                  <td>标题</td>
+                                </tr>
+                                <tr>
+                                  <td><input type="text" class="inputText" name="title" id="title" value="" /></td>
+                                </tr>
+                                <tr>
+                                  <td>作者<span class="grey">（选填）</span></td>
+                                </tr>
+                                <tr>
+                                  <td><input type="text" class="inputText" name="author" id="author" value="" /></td>
+                                </tr>
+                                <tr>
+                                  <td>封面 <span class="grey">（大图片建议尺寸：900像素 * 500像素）</span></td>
+                                </tr>
+                                <tr>
+                                  <td><input type="hidden" class="inputText" name="indexpic" id="indexpic" value="" data-image="#news_cover" />
+                                    <input type="button" class="btn1 btnUpload" id="btnUploadMaterial" value="上传" /></td>
+                                </tr>
+                                <tr>
+                                  <td><input type="checkbox" name="isshowpic" id="isshowpic" value="1" />
+                                    <label class="grey" for="isshowpic">封面图片显示在正文中</label></td>
+                                </tr>
+                                <tr>
+                                  <td>摘要<span class="grey">（选填）</span></td>
+                                </tr>
+                                <tr>
+                                  <td><textarea  class="editor1" name="remark" id="remark" ></textarea></td>
+                                </tr>
+                                <tr>
+                                  <td>正文</td>
+                                </tr>
+                                <tr>
+                                  <td><textarea  class="inputText1 editor" name="info" id="info" ></textarea></td>
+                                </tr>
+                                <tr>
+                                  <td>外部链接<span class="grey">（选填，若填写则直接跳转，不显示正文内容）</span></td>
+                                </tr>
+                                <tr>
+                                  <td><input type="text" class="inputText" name="url" id="url" value="" /></td>
+                                </tr>
+                                <tr>
+                                  <td>原文链接<span class="grey">（选填）</span></td>
+                                </tr>
+                                <tr>
+                                  <td><input type="text" class="inputText" name="ourl" id="ourl" value="" /></td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div></td>
+                      </tr>
+                    </table></td>
+                </tr>
+              </table>
+              
+              <div class="text-center"><button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 保存</button>
+              <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i> 取消</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script id="tplnews" type="text/html"> 
+<% for (var i = 1; i < list.length; i ++) { 
+var blank="";
+%> 
+<div class="leftitem"  id="newsleft_<%= list[i].id %>">
+	<div class="left_title"  id="single-title_<%= list[i].id %>"><%= list[i].title %></div>
+	<div class="left_img"><img src="<%=(list[i].indexpic==''?blank:list[i].indexpic)%>" id="single-image_<%= list[i].id %>" /></div>
+	<div class="overlay">
+		<a href="javascript:void(0);" class="news_edit"  onClick="editArray(<%= list[i].id %>)">修改</a>
+		<a href="javascript:void(0);" class="news_delete" onclick="delit(<%= list[i].id %>)">删除</a>
+	</div>
+</div> 
+<% } %> 
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>管理后台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script language="javascript" src="vendors/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/twitter-bootstrap-hover-dropdown.min.js"></script>
+<script type="text/javascript" src="js/jquery.func.js"></script>
+<link rel="stylesheet" media="screen" href="css/bootstrap.min.css">
+<link rel="stylesheet" media="screen" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" media="screen" href="css/bootstrap-admin-theme.css">
+<link rel="stylesheet" media="screen" href="css/style.css">
+<script type="text/javascript" src="vendors/bootbox.min.js"></script>
+<script type="text/javascript" src="js/blocksit.min.js"></script>
+<link rel="stylesheet" media="screen" href="images/wechat.css">
+<script>
+$(function(){
+$("#btnUploadMaterial").hover(function(){
+	$(".btnas").show();
+},function(){
+	$(".btnas").hide();
+});
+	
+$.deleteImg=function(id){
+	bootbox.confirm({
+		title: "确定操作",
+		message: "您确定删除该图文素材吗？", 
+		 callback: function(result) {
+				 if(result){
+				$.ajax({
+					url:"/admin/wechat/deletematerial.html",
+					data:"id="+id+"&type=1",
+					success: function(msg){
+						if(msg.status==1){
+							window.location.reload();
+						}else{
+							alerterr(msg.info);	
+						}
+					}
+					});		
+			}else{
+				 
+			}  
+		 }
+	})
+};
+});
+</script>
+<style>
+#btnUploadMaterial{ width:100%; background: url(images/uploadnews.gif) no-repeat center;position: relative;min-height: 200px;border: 3px dashed #ddd;border-radius: 3px;vertical-align: middle;  cursor: pointer;padding: 0 15px 15px 0;-webkit-transition: all .2s;transition: all .2s;}
+
+#blocks{ position:relative; font-size:12px; }
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top bootstrap-admin-navbar" role="navigation">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".main-navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+          <a class="navbar-brand" href="index.html">微信平台</a> </div>
+        <div class="collapse navbar-collapse main-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="index.html"><i class="glyphicon glyphicon-wrench"></i> 账户设置</a></li>
+            <li><a href="app.html"><i class="glyphicon glyphicon-th-large"></i> 应用管理</a></li>
+          </ul>
+          <ul class="nav navbar-nav pull-right">
+            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-hover="dropdown"><i class="glyphicon glyphicon-user"></i> 我的 <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="pwd.html">修改密码</a></li>
+                <li><a href="help.html">系统帮助</a></li>
+                <li role="presentation" class="divider"></li>
+                <li><a href="javascript:void(0);">退出登录</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row">
+    <div class="col-md-2 bootstrap-admin-col-left" id="menu-left">
+      <ul class="nav navbar-collapse collapse bootstrap-admin-navbar-side">
+        <li> <a href="index.html"><i class="glyphicon glyphicon-home"></i> 平台首页</a> </li>
+        <li> <a href="bind.html"><i class="glyphicon glyphicon-chevron-right"></i> 账号绑定</a> </li>
+        <li> <a href="javascript:void(0);"><i class="glyphicon glyphicon-chevron-right"></i> 公众平台</a>
+          <ul class="nav  bootstrap-admin-navbar-side collapse">
+            <li class="active"><a href="news.html"><i class="glyphicon glyphicon-chevron-right"></i> 素材管理</a></li>
+            <li><a href="keyword.html"><i class="glyphicon glyphicon-chevron-right"></i> 关键词回复</a></li>
+            <li><a href="menu.html"><i class="glyphicon glyphicon-chevron-right"></i> 自定义菜单</a></li>
+            <li><a href="msg.html"><i class="glyphicon glyphicon-chevron-right"></i> 信息群发</a></li>
+          </ul>
+        </li>
+        <li > <a href="user.html"><i class="glyphicon glyphicon-chevron-right"></i> 用户管理 <span class="badge">100</span></a></li>
+      </ul>
+      <div class="col-sm-12 no-padding">
+        <div class="panel-body text-center">中联无限 &copy; 2015</div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="navbar navbar-default bootstrap-admin-navbar-thin">
+            <ol class="breadcrumb bootstrap-admin-breadcrumb">
+              <li> <a href="index.html">微信平台</a> </li>
+              <li class="active">账号绑定</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-default bootstrap-admin-no-table-panel">
+            <div class="panel-heading">
+              <div class="text-muted bootstrap-admin-box-title">素材管理</div>
+            </div>
+            <div class="panel-body">
+              <ul id="myTab" class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="news.html" >图文素材</a></li>
+                <li ><a href="image.html"  >图片素材</a></li>
+              </ul>
+              <table class="table table-bordered" style="border-top:0px;">
+                <tr>
+                  <td style="border-top:0px;"><div class="item_add" id="btnUploadMaterial">
+                      <div class="btnas"> <a href="/admin/wechat/single.html" class="single">单图文消息</a> <a href="/admin/wechat/multi.html" class="multi">多图文消息</a> </div>
+                    </div>
+                    <hr/>
+                    <div  id="blocks"> 
+                      <!--多图文-->
+                      <div class="item_news water" >
+                        <div class="first"> <em>05月04日</em> <img src="images/nopic.jpg"  alt="" /> <span>微信服务号月推送消息增至4条,服务信号更明显</span> </div>
+                        <div class="other"> <span>【企业思维】浅析"支付宝"是如何做到"羊毛出在牛身上，猪买单"的</span> <img src="images/nopic.jpg"  alt="" /> </div>
+                        <div class="tool"> <a href="editNews.html" class="btn_edit"><i class="glyphicon glyphicon-pencil"></i>  修改</a> <a href="javascript:void(0);" onClick="$.deleteImg(19);" class="btn_del"><i class="glyphicon glyphicon-remove"></i>  删除</a> </div>
+                      </div>
+                      <div class="item_news water" >
+                        <div class="single"> <span>移动互联网进入微信营销时代 </span> <em>05月04日</em> <img src="images/nopic.jpg"  alt="" /> </div>
+                        <div class="tool"> <a href="/admin/wechat/single/id/18.html" class="btn_edit"><i class="glyphicon glyphicon-pencil"></i>  修改</a> <a href="javascript:void(0);" onClick="$.deleteImg(18);" class="btn_del"><i class="glyphicon glyphicon-remove"></i>  删除</a> </div>
+                      </div>
+                      <!--多图文-->
+                      <div class="item_news water" >
+                        <div class="first"> <em>05月04日</em> <img src="images/nopic.jpg"  alt="" /> <span>萨芬士大夫的萨芬</span> </div>
+                        <div class="other"> <span>大锅饭大锅饭的</span> <img src="images/nopic.jpg"  alt="" /> </div>
+                        <div class="tool"> <a href="/admin/wechat/multi/id/17.html" class="btn_edit"><i class="glyphicon glyphicon-pencil"></i>  修改</a> <a href="javascript:void(0);" onClick="$.deleteImg(17);" class="btn_del"><i class="glyphicon glyphicon-remove"></i>  删除</a> </div>
+                      </div>
+                      <div class="item_news water" >
+                        <div class="single"> <span>1</span> <em>05月01日</em> <img src="images/nopic.jpg"  alt="" /> </div>
+                        <div class="tool"> <a href="/admin/wechat/single/id/11.html" class="btn_edit"><i class="glyphicon glyphicon-pencil"></i>  修改</a> <a href="javascript:void(0);" onClick="$.deleteImg(11);" class="btn_del"><i class="glyphicon glyphicon-remove"></i>  删除</a> </div>
+                      </div>
+                      <div class="item_news water" >
+                        <div class="single"> <span>成都一面馆上演奢华求爱！金童玉女，画面太美！</span> <em>02月28日</em> <img src="images/nopic.jpg"  alt="" /> </div>
+                        <div class="tool"> <a href="/admin/wechat/single/id/10.html" class="btn_edit"><i class="glyphicon glyphicon-pencil"></i>  修改</a> <a href="javascript:void(0);" onClick="$.deleteImg(10);" class="btn_del"><i class="glyphicon glyphicon-remove"></i>  删除</a> </div>
+                      </div>
+                      <div class="item_news water" >
+                        <div class="single"> <span>成都一面馆上演奢华求爱！金童玉女，画面太美！</span> <em>01月30日</em> <img src="images/nopic.jpg"  alt="" /> </div>
+                        <div class="tool"> <a href="/admin/wechat/single/id/6.html" class="btn_edit"><i class="glyphicon glyphicon-pencil"></i>  修改</a> <a href="javascript:void(0);" onClick="$.deleteImg(6);" class="btn_del"><i class="glyphicon glyphicon-remove"></i>  删除</a> </div>
+                      </div>
+                      <div class="item_news water" >
+                        <div class="single"> <span>中国最好吃的19种面，你错过了哪一款？</span> <em>01月09日</em> <img src="images/nopic.jpg"  alt="" /> </div>
+                        <div class="tool"> <a href="/admin/wechat/single/id/7.html" class="btn_edit"><i class="glyphicon glyphicon-pencil"></i>  修改</a> <a href="javascript:void(0);" onClick="$.deleteImg(7);" class="btn_del"><i class="glyphicon glyphicon-remove"></i>  删除</a> </div>
+                      </div>
+                      <div class="item_news water" >
+                        <div class="single"> <span>你是三国英雄里的谁？</span> <em>01月09日</em> <img src="images/nopic.jpg"  alt="" /> </div>
+                        <div class="tool"> <a href="/admin/wechat/single/id/6.html" class="btn_edit"><i class="glyphicon glyphicon-pencil"></i>  修改</a> <a href="javascript:void(0);" onClick="$.deleteImg(6);" class="btn_del"><i class="glyphicon glyphicon-remove"></i>  删除</a> </div>
+                      </div>
+                    </div>
+                    <ul class="pagination pull-right">
+                      <li><a href="#">&laquo;</a></li>
+                      <li class="active"> <a href="#">1</a> </li>
+                      <li><a href="#">2</a></li>
+                      <li><a href="#">3</a></li>
+                      <li class="disabled"><span>...</span></li>
+                      <li><a href="#">10</a></li>
+                      <li><a href="#">11</a></li>
+                      <li><a href="#">12</a></li>
+                      <li><a href="#">&raquo;</a></li>
+                    </ul></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
